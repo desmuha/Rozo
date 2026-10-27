@@ -1,0 +1,1256 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ronzi Store | متجر رونزي الإلكتروني</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary-navy: #0D2855;
+    --primary-navy-dark: #071733;
+    --accent-orange: #F26522;
+    --accent-orange-hover: #D95314;
+    --bg-light: #F8FAFC;
+    --card-bg: #FFFFFF;
+    --text-main: #0F172A;
+    --text-muted: #64748B;
+  }
+  
+  body {
+    font-family: 'Cairo', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-main);
+  }
+
+  .drawer-overlay {
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  }
+  .drawer-content {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+
+  @media print {
+    body * {
+      visibility: hidden !important;
+    }
+    #printableInvoice, #printableInvoice * {
+      visibility: visible !important;
+    }
+    #printableInvoice {
+      position: absolute !important;
+      left: 0 !important;
+      top: 0 !important;
+      width: 100% !important;
+      box-shadow: none !important;
+      border: none !important;
+      padding: 20px !important;
+    }
+    .no-print {
+      display: none !important;
+    }
+  }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- Floating WhatsApp Button -->
+  <a id="floatingWhatsapp" href="#" 
+     target="_blank" 
+     rel="noopener noreferrer" 
+     class="fixed bottom-6 right-6 z-40 bg-emerald-500 hover:bg-emerald-600 text-white p-4 rounded-full shadow-2xl transition-all duration-300 transform hover:scale-110 flex items-center gap-2 group"
+     aria-label="تواصل معنا على الواتساب">
+    <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24">
+      <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+    </svg>
+    <span class="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs transition-all duration-500 ease-in-out text-sm font-bold">
+      تواصل معنا واتساب
+    </span>
+  </a>
+
+  <!-- Top Announcement Bar -->
+  <div class="bg-[#0D2855] text-white text-xs md:text-sm text-center py-2.5 px-4 font-bold border-b border-[#F26522]/30 flex items-center justify-center gap-2">
+    <span class="inline-block w-2 h-2 rounded-full bg-[#F26522] animate-pulse"></span>
+    <span id="announcementText">عروض متجددة وتوصيل سريع لكافة المناطق — متجر رونزي الإلكتروني</span>
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+      
+      <a href="#home" class="flex items-center gap-3 group">
+        <div class="w-12 h-12 rounded-xl bg-[#0D2855] flex items-center justify-center p-2 shadow-md group-hover:scale-105 transition-transform">
+          <svg viewBox="0 0 100 100" class="w-full h-full">
+            <path d="M20,15 L60,15 C75,15 85,25 85,40 C85,55 75,65 60,65 L40,65 L40,85 L20,85 Z" fill="#FFFFFF"/>
+            <path d="M40,32 L58,32 C65,32 70,36 70,42 C70,48 65,52 58,52 L40,52 Z" fill="#0D2855"/>
+            <polygon points="55,65 85,65 85,95" fill="#F26522"/>
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <span id="headerStoreName" class="font-black text-2xl tracking-tight text-[#0D2855] leading-none">RONZI</span>
+          <span class="text-xs font-bold text-[#F26522] tracking-widest mt-0.5">STORE · رونزي</span>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 font-bold text-sm text-slate-700">
+        <a href="#home" class="hover:text-[#F26522] transition-colors">الرئيسية</a>
+        <a href="#products" class="hover:text-[#F26522] transition-colors">المنتجات المميزة</a>
+        <a href="#contact" class="hover:text-[#F26522] transition-colors">تواصل معنا</a>
+      </nav>
+
+      <div class="flex items-center gap-2.5">
+        <div class="relative hidden sm:block w-48 lg:w-64">
+          <input id="searchInput" type="text" placeholder="بحث عن منتج..." class="w-full pl-8 pr-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-[#0D2855] transition-colors">
+          <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        </div>
+
+        <button id="favBtn" class="relative p-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 transition-colors" title="المفضلة">
+          <svg class="w-5 h-5 text-rose-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <span id="favCount" class="absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-black min-w-[16px] text-center">0</span>
+        </button>
+
+        <button id="cartBtn" class="relative bg-[#0D2855] hover:bg-[#071733] text-white px-3.5 sm:px-4 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 transition-all shadow-md active:scale-95">
+          <svg class="w-5 h-5 text-[#F26522]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+          <span class="hidden sm:inline">السلة</span>
+          <span id="cartCount" class="bg-[#F26522] text-white text-xs px-2 py-0.5 rounded-full font-black min-w-[20px] text-center">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Live Search Box -->
+  <div class="sm:hidden px-4 py-2.5 bg-white border-b border-slate-200">
+    <div class="relative">
+      <input id="mobileSearchInput" type="text" placeholder="ابحث عن منتج..." class="w-full pl-8 pr-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-[#0D2855]">
+      <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <main id="home" class="flex-grow">
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 my-6 md:my-10">
+      <div class="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#071733] via-[#0D2855] to-[#163a75] text-white p-6 sm:p-8 md:p-14 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8">
+        <div class="relative z-10 max-w-xl text-center md:text-right">
+          <span class="inline-block text-[#F26522] font-black text-xs md:text-sm tracking-wider uppercase bg-[#F26522]/10 px-3.5 py-1.5 rounded-full mb-4 border border-[#F26522]/20">
+            ✦ منتجات حصرية وأصيلة
+          </span>
+          <h1 class="text-2xl sm:text-4xl md:text-5xl font-black leading-snug md:leading-tight mb-4 tracking-tight">
+            تكنولوجيا أحدث،<br><span class="text-[#F26522] inline-block mt-1">تجربة أسهل وأفضل.</span>
+          </h1>
+          <p class="text-slate-300 text-sm sm:text-base md:text-lg leading-relaxed mb-6">
+            اخترنا لك أجود الإكسسوارات التقنية بعناية لضمان أفضل أداء وحماية لأجهزتك بأفضل الأسعار.
+          </p>
+          <div class="flex flex-wrap items-center justify-center md:justify-start gap-4">
+            <button onclick="document.querySelector('#products').scrollIntoView({behavior:'smooth'})" class="bg-[#F26522] hover:bg-[#D95314] text-white font-black px-7 py-3.5 rounded-xl shadow-lg hover:shadow-orange-500/30 transition-all transform hover:-translate-y-0.5">
+              تصفح المنتجات الآن
+            </button>
+            <a id="heroWhatsappBtn" href="#" target="_blank" class="bg-white/10 hover:bg-white/20 text-white font-bold px-5 py-3.5 rounded-xl border border-white/10 transition-colors">
+              💬 طلب خاص عبر الواتساب
+            </a>
+          </div>
+        </div>
+        <div class="relative z-10 flex items-center justify-center w-full md:w-auto">
+          <div class="w-44 h-44 sm:w-48 sm:h-48 md:w-64 md:h-64 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center p-8 shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
+            <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-2xl">
+              <path d="M20,15 L60,15 C75,15 85,25 85,40 C85,55 75,65 60,65 L40,65 L40,85 L20,85 Z" fill="#FFFFFF"/>
+              <path d="M40,32 L58,32 C65,32 70,36 70,42 C70,48 65,52 58,52 L40,52 Z" fill="#0D2855"/>
+              <polygon points="55,65 85,65 85,95" fill="#F26522"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section id="products" class="max-w-6xl mx-auto px-4 sm:px-6 my-12">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+        <div>
+          <span class="text-[#F26522] font-black text-xs tracking-widest uppercase">PRODUCTS</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-[#0D2855]">المنتجات المتاحة حالياً</h2>
+          <p class="text-slate-500 text-sm mt-1">اضغط على أي منتج لعرض التفاصيل الكاملة والألوان المتاحة</p>
+        </div>
+        <div id="productCount" class="text-xs font-bold bg-slate-200 text-slate-700 px-3 py-1.5 rounded-full w-max">
+          0 منتجات
+        </div>
+      </div>
+      <div id="productsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8"></div>
+    </section>
+
+    <!-- Why Ronzi Section -->
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 my-14">
+      <div class="bg-white rounded-3xl p-8 md:p-10 border border-slate-200 shadow-sm">
+        <div class="text-center max-w-xl mx-auto mb-10">
+          <h2 class="text-2xl md:text-3xl font-black text-[#0D2855]">لماذا تختار متجرنا؟</h2>
+          <p class="text-slate-500 text-sm mt-2">نضمن لك تجربة تسوق سهلة، وسريعة ومضمونة 100%</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col items-center text-center">
+            <div class="w-14 h-14 rounded-2xl bg-[#0D2855]/10 text-[#0D2855] flex items-center justify-center text-2xl mb-4">🚀</div>
+            <h3 class="font-black text-lg text-[#0D2855] mb-2">توصيل سريع ومباشر</h3>
+            <p class="text-slate-600 text-sm leading-relaxed">توصيل سريع لكافة المناطق مع متابعة كاملة حتى وصول المنتج ليديك.</p>
+          </div>
+          <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col items-center text-center">
+            <div class="w-14 h-14 rounded-2xl bg-[#F26522]/10 text-[#F26522] flex items-center justify-center text-2xl mb-4">💳</div>
+            <h3 class="font-black text-lg text-[#0D2855] mb-2">طرق دفع متعدّدة</h3>
+            <p class="text-slate-600 text-sm leading-relaxed">الدفع نقداً عند الاستلام أو عبر تطبيق شام كاش لراحة أكبر.</p>
+          </div>
+          <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col items-center text-center">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-2xl mb-4">📱</div>
+            <h3 class="font-black text-lg text-[#0D2855] mb-2">دعم واتساب مباشر</h3>
+            <p class="text-slate-600 text-sm leading-relaxed">فريقنا متواجد للرد على كافة استفساراتكم ومتابعة الطلبات لحظة بلحظة.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Direct Contact Section -->
+    <section id="contact" class="max-w-6xl mx-auto px-4 sm:px-6 my-14">
+      <div class="bg-[#0D2855] text-white rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-black mb-2">هل لديك أي استفسار أو طلب خاص؟</h2>
+          <p class="text-slate-300 text-sm md:text-base">تواصل معنا مباشرة عبر رقم الواتساب الخاص بالمتجر وسنقوم بظبط طلبك فوراً.</p>
+        </div>
+        <a id="contactWhatsappBtn" href="#" target="_blank" class="bg-[#F26522] hover:bg-[#D95314] text-white font-black px-8 py-4 rounded-xl shadow-lg transition-transform hover:scale-105 whitespace-nowrap flex items-center gap-2">
+          <span id="contactWhatsappText">تواصل معنا واتساب</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[#071733] text-white pt-12 pb-8 border-t border-slate-800">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-slate-800">
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center p-1.5">
+            <svg viewBox="0 0 100 100" class="w-full h-full">
+              <path d="M20,15 L60,15 C75,15 85,25 85,40 C85,55 75,65 60,65 L40,65 L40,85 L20,85 Z" fill="#0D2855"/>
+              <polygon points="55,65 85,65 85,95" fill="#F26522"/>
+            </svg>
+          </div>
+          <span id="footerStoreName" class="font-black text-xl text-white">RONZI STORE</span>
+        </div>
+        <p class="text-slate-400 text-sm leading-relaxed">متجرك الموثوق للحصول على أحدث المستلزمات التقنية والإكسسوارات الذكية بأعلى جودة وأفضل أسعار.</p>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-[#F26522] mb-4">خدمة العملاء والتواصل</h4>
+        <ul class="space-y-2 text-sm text-slate-300">
+          <li>الواتساب الرئيسي: <a id="footerWhatsappLink" href="#" class="text-white hover:underline dir-ltr inline-block">--</a></li>
+          <li>ساعات العمل: من 9:00 صباحاً حتى 10:00 مساءً</li>
+          <li>التوصيل: كافة المناطق</li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-[#F26522] mb-4">طرق الدفع المتاحة</h4>
+        <div class="flex flex-wrap gap-2 text-xs font-bold">
+          <span class="bg-white/10 px-3 py-1.5 rounded-lg border border-white/10">💵 الدفع عند الاستلام</span>
+          <span class="bg-white/10 px-3 py-1.5 rounded-lg border border-white/10">📱 شام كاش (Sham Cash)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
+      <div>© 2026 متجر رونزي. جميع الحقوق محفوظة.</div>
+      <div class="flex gap-4">
+        <a href="#home" class="hover:text-white">الرئيسية</a>
+        <a href="#products" class="hover:text-white">المنتجات</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CART DRAWER MODAL -->
+  <div id="drawerBack" class="drawer-overlay fixed inset-0 bg-slate-900/60 z-50 opacity-0 pointer-events-none invisible">
+    <aside class="drawer-content fixed top-0 left-0 bottom-0 w-full max-w-md bg-white text-slate-900 shadow-2xl flex flex-col -translate-x-full">
+      <div class="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div class="flex items-center gap-2">
+          <svg class="w-6 h-6 text-[#F26522]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+          <h2 class="text-lg font-black text-[#0D2855]">سلة التسوق</h2>
+        </div>
+        <button id="closeCart" class="p-2 rounded-lg hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <div id="cartItems" class="flex-grow overflow-y-auto p-5 space-y-4 divide-y divide-slate-100"></div>
+
+      <div class="p-5 border-t border-slate-200 bg-slate-50 space-y-3">
+        <div class="flex justify-between text-sm text-slate-600">
+          <span>المجموع الفرعي</span>
+          <b id="subtotal" class="font-bold text-slate-900">0 ل.س</b>
+        </div>
+        <div class="flex justify-between text-sm text-emerald-600">
+          <span>الخصم (الكوبون)</span>
+          <b id="discount" class="font-bold">− 0 ل.س</b>
+        </div>
+        <div class="flex justify-between text-base font-black text-[#0D2855] pt-2 border-t border-slate-200">
+          <span>الإجمالي النهائي</span>
+          <b id="total" class="text-xl text-[#F26522]">0 ل.س</b>
+        </div>
+
+        <div class="pt-2">
+          <div class="flex gap-2">
+            <input id="couponInput" type="text" placeholder="أدخل كود الخصم" class="flex-grow px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:border-[#0D2855]">
+            <button id="applyCoupon" class="bg-[#0D2855] hover:bg-[#071733] text-white px-4 py-2 rounded-xl text-sm font-bold transition-colors">تطبيق</button>
+          </div>
+          <div id="couponStatus" class="text-xs font-bold mt-1.5 min-h-[16px]"></div>
+        </div>
+
+        <button id="checkoutBtn" class="w-full bg-[#F26522] hover:bg-[#D95314] text-white py-3.5 rounded-xl font-black text-center shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+          متابعة إتمام الطلب ←
+        </button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- WISHLIST DRAWER MODAL -->
+  <div id="favDrawerBack" class="drawer-overlay fixed inset-0 bg-slate-900/60 z-50 opacity-0 pointer-events-none invisible">
+    <aside class="drawer-content fixed top-0 left-0 bottom-0 w-full max-w-md bg-white text-slate-900 shadow-2xl flex flex-col -translate-x-full">
+      <div class="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div class="flex items-center gap-2">
+          <svg class="w-6 h-6 text-rose-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          <h2 class="text-lg font-black text-[#0D2855]">قائمة المفضلة</h2>
+        </div>
+        <button id="closeFav" class="p-2 rounded-lg hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div id="favItems" class="flex-grow overflow-y-auto p-5 space-y-4 divide-y divide-slate-100"></div>
+    </aside>
+  </div>
+
+  <!-- PRODUCT DETAIL MODAL -->
+  <div id="productDetailModal" class="fixed inset-0 z-50 bg-slate-900/70 hidden place-items-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 md:p-8 shadow-2xl relative my-8">
+      <button id="closeProductDetail" class="absolute top-5 left-5 text-slate-400 hover:text-slate-700 p-1">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+      <div id="productDetailContent"></div>
+    </div>
+  </div>
+
+  <!-- CHECKOUT MODAL -->
+  <div id="modalBack" class="fixed inset-0 z-50 bg-slate-900/70 hidden place-items-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 md:p-8 shadow-2xl relative my-8">
+      
+      <!-- Checkout Form View -->
+      <div id="checkoutFormWrap">
+        <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-200">
+          <h2 class="text-xl font-black text-[#0D2855]">إتمام الطلب والمعلومات</h2>
+          <button id="closeModal" class="text-slate-400 hover:text-slate-700 p-1">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
+        </div>
+
+        <form id="orderForm" class="space-y-4" novalidate>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">الاسم الكامل * <span class="text-rose-500">(نص إجباري)</span></label>
+              <input id="customerName" required placeholder="أدخل اسمك الثلاثي" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#0D2855] focus:outline-none">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">رقم الهاتف / الواتساب * <span class="text-rose-500">(11 رقم)</span></label>
+              <input id="customerPhone" required type="tel" maxlength="11" placeholder="مثال: 09695376641" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#0D2855] focus:outline-none">
+              <span id="phoneError" class="text-[11px] text-rose-500 hidden mt-1 block font-bold">يرجى إدخال 11 رقماً بدون أحرف</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">المدينة * <span class="text-rose-500">(إجباري)</span></label>
+              <input id="customerCity" required placeholder="مثلاً: حلب / دمشق" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#0D2855] focus:outline-none">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">العنوان بالتفصيل * <span class="text-rose-500">(إجباري)</span></label>
+              <input id="customerAddress" required placeholder="المنطقة، الشارع، أقرب نقطة دالة" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#0D2855] focus:outline-none">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">ملاحظات إضافية (اختياري)</label>
+            <input id="customerNote" placeholder="وقت التسليم المفضل أو أي ملاحظة..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-[#0D2855] focus:outline-none">
+          </div>
+
+          <!-- Payment Options -->
+          <div class="pt-2">
+            <label class="block text-xs font-bold text-slate-700 mb-2">طريقة الدفع *</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <label class="border-2 border-slate-200 rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:border-[#0D2855] transition-colors">
+                <input type="radio" name="payment" value="الدفع عند الاستلام" checked class="accent-[#F26522] w-4 h-4">
+                <div>
+                  <div class="font-bold text-sm text-slate-800">الدفع عند الاستلام</div>
+                  <div class="text-xs text-slate-500">نقداً عند تسلم الطلب</div>
+                </div>
+              </label>
+
+              <label class="border-2 border-slate-200 rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:border-[#0D2855] transition-colors">
+                <input type="radio" name="payment" value="شام كاش" class="accent-[#F26522] w-4 h-4">
+                <div>
+                  <div class="font-bold text-sm text-slate-800">شام كاش (Sham Cash)</div>
+                  <div class="text-xs text-slate-500">تحويل سريع ومباشر</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Sham Cash Step Box -->
+          <div id="shamcashBox" class="hidden p-4 bg-orange-50 border border-orange-200 rounded-2xl space-y-3">
+            <div class="flex items-center justify-between border-b border-orange-200 pb-2">
+              <span class="font-bold text-xs text-[#0D2855]">بيانات تحويل شام كاش (Sham Cash)</span>
+              <span id="shamcashAccountHeader" class="text-xs text-[#F26522] font-black">حساب متجر رونزي</span>
+            </div>
+
+            <div class="p-4 bg-white rounded-xl border border-orange-200 text-center space-y-2 shadow-sm">
+              <p class="text-xs text-slate-600 font-bold">يرجى تحويل مبلغ الطلب للحساب التالي عبر تطبيق شام كاش:</p>
+              <div id="shamcashAccountDisplay" class="font-mono font-black text-lg text-[#0D2855] bg-orange-100/70 border border-orange-300 py-2 px-4 rounded-xl dir-ltr tracking-wider inline-block">
+                0969537664@shamcash
+              </div>
+            </div>
+
+            <button type="button" id="confirmTransferBtn" onclick="showRefInput()" class="w-full bg-[#0D2855] hover:bg-[#071733] text-white py-2.5 rounded-xl font-bold text-xs shadow transition-all flex items-center justify-center gap-1.5">
+              <span>✓ تم التحويل / إدخال كود المعاملة</span>
+            </button>
+
+            <div id="refInputArea" class="hidden space-y-1.5 pt-2 border-t border-orange-200/60">
+              <label class="block text-xs font-bold text-[#0D2855]">كود/رقم المعاملة (Ref ID) *</label>
+              <div class="flex gap-2">
+                <input id="shamcashRef" placeholder="أدخل كود المعاملة (مثال: TXN-89301)" class="w-full px-3.5 py-2 rounded-xl border border-orange-300 text-sm focus:outline-none bg-white">
+              </div>
+              <p class="text-[11px] text-slate-500">🔒 سيتم التأكد من صحة كود المعاملة تلقائياً عبر نظام التحقق.</p>
+            </div>
+          </div>
+
+          <button type="submit" class="w-full bg-[#F26522] hover:bg-[#D95314] text-white py-4 rounded-xl font-black text-lg shadow-lg transition-transform hover:scale-[1.01] mt-4">
+            تأكيد الطلب وإصدار الفاتورة ✓
+          </button>
+        </form>
+      </div>
+
+      <!-- LOADING SPINNER VIEW -->
+      <div id="loadingView" class="hidden py-12 text-center space-y-4">
+        <div class="inline-block relative w-16 h-16">
+          <div class="w-16 h-16 rounded-full border-4 border-orange-200 border-t-[#F26522] animate-spin"></div>
+        </div>
+        <div class="space-y-1">
+          <h3 class="font-black text-lg text-[#0D2855]">جاري معالجة وإصدار الفاتورة...</h3>
+          <p class="text-xs text-slate-500">يرجى الانتظار لحظات لإنهاء العملية وتجهيز الفاتورة الكاملة</p>
+        </div>
+      </div>
+
+      <!-- INVOICE SUCCESS VIEW -->
+      <div id="successView" class="hidden space-y-6">
+        
+        <!-- Printable Invoice Box -->
+        <div id="printableInvoice" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5 text-slate-800">
+          <div class="flex items-center justify-between border-b pb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl bg-[#0D2855] flex items-center justify-center p-2">
+                <svg viewBox="0 0 100 100" class="w-full h-full">
+                  <path d="M20,15 L60,15 C75,15 85,25 85,40 C85,55 75,65 60,65 L40,65 L40,85 L20,85 Z" fill="#FFFFFF"/>
+                  <polygon points="55,65 85,65 85,95" fill="#F26522"/>
+                </svg>
+              </div>
+              <div>
+                <h3 id="invStoreName" class="font-black text-xl text-[#0D2855]">RONZI STORE</h3>
+                <span class="text-xs font-bold text-[#F26522]">فاتورة طلب رسمية متكاملة</span>
+              </div>
+            </div>
+
+            <div class="text-left">
+              <div id="invNumber" class="font-black text-sm text-[#0D2855]">#RZ-1001</div>
+              <div id="invDate" class="text-xs text-slate-500">2026/10/25</div>
+            </div>
+          </div>
+
+          <!-- Customer info -->
+          <div class="grid grid-cols-2 gap-4 text-xs bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+            <div>
+              <span class="text-slate-500 block">العميل:</span>
+              <strong id="invCustomerName" class="text-slate-900 font-bold">---</strong>
+            </div>
+            <div>
+              <span class="text-slate-500 block">الهاتف:</span>
+              <strong id="invCustomerPhone" class="text-slate-900 font-bold">---</strong>
+            </div>
+            <div class="col-span-2">
+              <span class="text-slate-500 block">العنوان:</span>
+              <strong id="invCustomerAddress" class="text-slate-900 font-bold">---</strong>
+            </div>
+          </div>
+
+          <!-- Invoice Products Table -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-right text-xs border-collapse">
+              <thead>
+                <tr class="border-b-2 border-slate-200 text-slate-500 font-bold">
+                  <th class="py-2.5 px-2">المنتج (اللون)</th>
+                  <th class="py-2.5 px-2 text-center">الكمية</th>
+                  <th class="py-2.5 px-2 text-left">السعر الإجمالي</th>
+                </tr>
+              </thead>
+              <tbody id="invItemsBody" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+
+          <!-- Totals Summary -->
+          <div class="border-t pt-3 space-y-1.5 text-xs">
+            <div class="flex justify-between text-slate-600">
+              <span>المجموع الفرعي:</span>
+              <span id="invSubtotal" class="font-bold">0 ل.س</span>
+            </div>
+            <div class="flex justify-between text-emerald-600">
+              <span>الخصم المطبق:</span>
+              <span id="invDiscount" class="font-bold">0 ل.س</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>طريقة الدفع:</span>
+              <span id="invPayment" class="font-bold">الدفع عند الاستلام</span>
+            </div>
+            <div class="flex justify-between text-base font-black text-[#0D2855] pt-2.5 border-t border-slate-200">
+              <span>المبلغ الإجمالي المطلـوب:</span>
+              <span id="invTotal" class="text-[#F26522] text-lg">0 ل.س</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="no-print flex flex-col sm:flex-row gap-3">
+          <button id="downloadPdfBtn" class="flex-1 bg-[#0D2855] hover:bg-[#071733] text-white py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-colors shadow-md">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            <span>طباعة / حفظ الفاتورة PDF 📄</span>
+          </button>
+          <a id="sendWhatsappBtn" target="_blank" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-colors">
+            💬 إرسال الطلب للواتساب
+          </a>
+        </div>
+
+        <button id="finishBtn" class="no-print w-full bg-slate-200 hover:bg-slate-300 text-slate-800 py-3 rounded-xl font-bold text-sm">
+          إغلاق والعودة للمتجر
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#0D2855] text-white px-5 py-3 rounded-xl shadow-2xl text-sm font-bold z-50 transition-all duration-300 opacity-0 pointer-events-none translate-y-4"></div>
+
+  <script>
+    /* =========================================================
+       LOCALSTORAGE SYNCHRONIZATION SETUP
+       ========================================================= */
+    const STORAGE_KEY = 'ronziData';
+
+    function getDefaultStoreData() {
+      return {
+        storeInfo: {
+          name: 'متجر رونزي',
+          whatsapp: '963969537664',
+          shamcash: '0969537664@shamcash',
+          announcement: 'عروض متجددة وتوصيل سريع لكافة المناطق — متجر رونزي الإلكتروني'
+        },
+        products: [
+          {
+            id: 1,
+            name: 'مايك لاسلكي احترافي',
+            cat: 'الصوتيات',
+            price: 2800,
+            tag: 'جديد ومميز',
+            rating: '4.9 ★★★★★',
+            active: true,
+            desc: 'ميكروفون لاسلكي ذكي بجودة صوت عالية ونقاء ممتاز للمحتوى والتسجيل عالي الدقة، مدى تغطية يصل إلى 20 متراً مع خاصية إلغاء الضوضاء الذكية.',
+            colors: [
+              { name: 'أسود ملكي', icon: '🎙️' },
+              { name: 'فضي مطفي', icon: '🎤' }
+            ]
+          },
+          {
+            id: 2,
+            name: 'مبرد جوال مائي ثلجي',
+            cat: 'إكسسوارات الجوال',
+            price: 1100,
+            tag: 'الأكثر مبيعاً',
+            rating: '4.8 ★★★★★',
+            active: true,
+            desc: 'تبريد مائي وفائق السرعة لحماية الجوال من الارتفاع المفاجئ للحرارة أثناء اللعب والاستخدام الثقيل، تصميم هادئ جداً مع إضاءة RGB.',
+            colors: [
+              { name: 'أسود تيتانيوم', icon: '❄️' },
+              { name: 'أبيض ثلجي', icon: '🧊' },
+              { name: 'أزرق دراك', icon: '🔵' }
+            ]
+          }
+        ],
+        coupons: [
+          { code: 'ulebi', discountPercent: 20, active: true }
+        ],
+        orders: [],
+        users: [
+          { id: 1, username: 'admin', password: 'admin123', role: 'المدير العام', active: true }
+        ]
+      };
+    }
+
+    function getStoreData() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        const def = getDefaultStoreData();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(def));
+        return def;
+      }
+      try {
+        return JSON.parse(raw);
+      } catch (e) {
+        return getDefaultStoreData();
+      }
+    }
+
+    function saveStoreData(data) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    let storeData = getStoreData();
+    let products = storeData.products.filter(p => p.active !== false);
+
+    // Dynamic UI Updates based on Store Info
+    function applyStoreConfig() {
+      const info = storeData.storeInfo || {};
+      const waNumber = info.whatsapp || '963969537664';
+      const cleanWa = waNumber.replace(/\+/g, '');
+
+      if (info.announcement) {
+        document.getElementById('announcementText').textContent = info.announcement;
+      }
+      if (info.name) {
+        document.getElementById('headerStoreName').textContent = info.name;
+        document.getElementById('footerStoreName').textContent = info.name;
+        document.getElementById('invStoreName').textContent = info.name;
+        document.getElementById('shamcashAccountHeader').textContent = `حساب ${info.name}`;
+      }
+      if (info.shamcash) {
+        document.getElementById('shamcashAccountDisplay').textContent = info.shamcash;
+      }
+
+      const defaultWaMsg = encodeURIComponent(`مرحباً ${info.name || 'متجر رونزي'}، أريد الاستفسار عن المنتجات`);
+      const waUrl = `https://wa.me/${cleanWa}?text=${defaultWaMsg}`;
+
+      document.getElementById('floatingWhatsapp').href = waUrl;
+      document.getElementById('heroWhatsappBtn').href = waUrl;
+      document.getElementById('contactWhatsappBtn').href = waUrl;
+      document.getElementById('contactWhatsappText').textContent = `تواصل على +${cleanWa}`;
+      
+      const footerWaLink = document.getElementById('footerWhatsappLink');
+      footerWaLink.href = waUrl;
+      footerWaLink.textContent = `+${cleanWa}`;
+    }
+
+    let cart = {}; 
+    let wishlist = new Set();
+    let appliedCouponPercentage = 0;
+    let orderSeq = storeData.orders.length ? (1000 + storeData.orders.length + 1) : 1001; 
+    let currentOrderId = 'RZ-1001';
+    const usedTransactionCodes = new Set(['TXN-OLD123', 'REF-99999']);
+
+    const money = n => new Intl.NumberFormat('ar-SY', { maximumFractionDigits: 0 }).format(n) + ' ل.س';
+    const grid = document.getElementById('productsGrid');
+
+    function renderProducts(filteredProducts = products) {
+      document.getElementById('productCount').textContent = `${filteredProducts.length} منتجات`;
+      if (!filteredProducts.length) {
+        grid.innerHTML = `
+          <div class="col-span-2 text-center py-12 text-slate-400">
+            <div class="text-5xl mb-3">🔍</div>
+            <h3 class="font-bold text-slate-700">لم يتم العثور على أية منتجات مطابقة</h3>
+            <p class="text-xs mt-1">جرب البحث بكلمات مختلفة مثل "مايك" أو "مبرد"</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filteredProducts.map(p => {
+        const isFav = wishlist.has(p.id);
+        const mainIcon = (p.colors && p.colors.length) ? p.colors[0].icon : '📦';
+        return `
+        <article class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between relative group">
+          <button onclick="toggleFav(event, ${p.id})" class="absolute top-4 left-4 z-20 w-10 h-10 rounded-full bg-white/80 backdrop-blur-md border border-slate-200 flex items-center justify-center text-slate-400 hover:text-rose-500 transition-colors shadow-sm">
+            <svg class="w-5 h-5 ${isFav ? 'text-rose-500 fill-current' : ''}" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+          </button>
+
+          <div onclick="openProductDetail(${p.id})" class="cursor-pointer">
+            <div class="h-48 bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center relative p-6">
+              <span class="absolute top-4 right-4 bg-[#0D2855] text-white text-xs font-bold px-3 py-1 rounded-full">${p.tag || 'مميز'}</span>
+              <span class="text-7xl transform group-hover:scale-110 transition-transform duration-300">${mainIcon}</span>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center justify-between text-xs font-bold mb-1">
+                <span class="text-[#F26522]">${p.cat || 'عام'}</span>
+                <span class="text-amber-500">${p.rating || '5.0 ★★★★★'}</span>
+              </div>
+              <h3 class="text-xl font-black text-[#0D2855] mb-2">${p.name}</h3>
+              <p class="text-slate-600 text-sm leading-relaxed mb-4 line-clamp-2">${p.desc || ''}</p>
+            </div>
+          </div>
+
+          <div class="p-6 pt-0 flex items-center justify-between border-t border-slate-100 mt-2">
+            <div>
+              <span class="text-xs text-slate-400 block">السعر النقدي</span>
+              <div class="text-xl font-black text-[#0D2855]">${money(p.price)}</div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="openProductDetail(${p.id})" class="bg-[#0D2855] hover:bg-[#071733] text-white px-3.5 py-2.5 rounded-xl font-bold text-xs transition-colors">
+                عرض التفاصيل
+              </button>
+              <button onclick="addToCartDirect(${p.id})" class="bg-[#F26522] hover:bg-[#D95314] text-white px-3.5 py-2.5 rounded-xl font-bold text-xs shadow-md active:scale-95 transition-all">
+                + السلة
+              </button>
+            </div>
+          </div>
+        </article>
+      `}).join('');
+    }
+
+    function toggleFav(e, id) {
+      if (e) e.stopPropagation();
+      if (wishlist.has(id)) {
+        wishlist.delete(id);
+        toast('تم الإزالة من قائمة المفضلة 💔');
+      } else {
+        wishlist.add(id);
+        toast('تم إضافة المنتج للمفضلة ❤️');
+      }
+      renderProducts();
+      renderWishlist();
+    }
+
+    function renderWishlist() {
+      document.getElementById('favCount').textContent = wishlist.size;
+      const favContainer = document.getElementById('favItems');
+      const favList = products.filter(p => wishlist.has(p.id));
+
+      if (!favList.length) {
+        favContainer.innerHTML = `
+          <div class="text-center py-12 text-slate-400">
+            <div class="text-5xl mb-3">❤️</div>
+            <h3 class="font-bold text-slate-700">قائمة المفضلة فارغة</h3>
+            <p class="text-xs mt-1">انقر على رمز القلب على أي منتج لحفظه هنا.</p>
+          </div>
+        `;
+      } else {
+        favContainer.innerHTML = favList.map(p => `
+          <div class="flex items-center justify-between gap-3 pt-3">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-2xl">${(p.colors && p.colors.length) ? p.colors[0].icon : '📦'}</div>
+              <div>
+                <strong class="block text-sm font-bold text-slate-800">${p.name}</strong>
+                <span class="text-xs text-slate-500">${money(p.price)}</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="addToCartDirect(${p.id}); toggleFav(null, ${p.id});" class="bg-[#F26522] hover:bg-[#D95314] text-white px-3 py-1.5 rounded-lg text-xs font-bold">+ للسلة</button>
+              <button onclick="toggleFav(null, ${p.id})" class="text-slate-400 hover:text-rose-500 p-1">✕</button>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    let currentDetailProductId = null;
+    let selectedColorObj = null;
+    let selectedQty = 1;
+
+    function openProductDetail(id) {
+      const p = products.find(prod => prod.id === id);
+      if (!p) return;
+      currentDetailProductId = id;
+      selectedColorObj = (p.colors && p.colors.length) ? p.colors[0] : { name: 'الافتراضي', icon: '📦' };
+      selectedQty = 1;
+
+      const modal = document.getElementById('productDetailModal');
+      const content = document.getElementById('productDetailContent');
+
+      content.innerHTML = `
+        <div class="space-y-6">
+          <div class="flex flex-col sm:flex-row gap-6 items-center">
+            <div id="productImagePreview" class="w-full sm:w-1/2 h-52 bg-slate-100 rounded-2xl flex items-center justify-center text-8xl relative transition-all duration-300">
+              ${selectedColorObj.icon}
+              <span class="absolute top-3 right-3 bg-[#0D2855] text-white text-[10px] font-bold px-2.5 py-1 rounded-full">${p.tag || 'مميز'}</span>
+            </div>
+            <div class="w-full sm:w-1/2 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-[#F26522]">${p.cat || 'عام'}</span>
+                <button onclick="shareProduct(${p.id})" class="flex items-center gap-1.5 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-xl transition-colors">
+                  <svg class="w-4 h-4 text-[#0D2855]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 10-5.367-2.684 3 3 0 005.367 2.684zm0 9.316a3 3 0 10-5.368 2.684 3 3 0 005.368-2.684z"></path></svg>
+                  مشاركة المنتج
+                </button>
+              </div>
+              <h2 class="text-2xl font-black text-[#0D2855]">${p.name}</h2>
+              <div class="text-sm font-bold text-amber-500">${p.rating || '5.0 ★★★★★'}</div>
+              <div class="text-2xl font-black text-[#0D2855] pt-2">${money(p.price)}</div>
+            </div>
+          </div>
+
+          <p class="text-slate-600 text-sm leading-relaxed border-t border-b border-slate-100 py-3">${p.desc || ''}</p>
+
+          ${p.colors && p.colors.length ? `
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-2">اختر اللون المفضل:</label>
+            <div class="flex flex-wrap gap-2">
+              ${p.colors.map((c, i) => `
+                <button onclick="selectProductColor('${c.name}')" id="colorBtn_${c.name}" class="color-opt-btn px-4 py-2 rounded-xl border text-xs font-bold transition-all ${i === 0 ? 'border-[#0D2855] bg-[#0D2855] text-white' : 'border-slate-300 text-slate-700 hover:bg-slate-50'}">
+                  ${c.name}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+          ` : ''}
+
+          <div class="flex items-center justify-between border-t border-slate-100 pt-4">
+            <span class="text-xs font-bold text-slate-700">الكمية المطلوبة:</span>
+            <div class="flex items-center border border-slate-300 rounded-xl overflow-hidden">
+              <button onclick="updateDetailQty(-1)" class="px-3.5 py-1.5 bg-slate-100 font-bold hover:bg-slate-200 text-slate-700">-</button>
+              <span id="detailQtyDisplay" class="px-4 text-sm font-bold">1</span>
+              <button onclick="updateDetailQty(1)" class="px-3.5 py-1.5 bg-slate-100 font-bold hover:bg-slate-200 text-slate-700">+</button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            <button onclick="addCurrentToCart()" class="bg-[#0D2855] hover:bg-[#071733] text-white py-3.5 rounded-xl font-bold text-sm shadow-md transition-all">
+              + إضافة للسلة
+            </button>
+            <button onclick="buyNowCurrent()" class="bg-[#F26522] hover:bg-[#D95314] text-white py-3.5 rounded-xl font-black text-sm shadow-md transition-all">
+              ⚡ شراء مباشر الآن
+            </button>
+          </div>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+      modal.classList.add('grid');
+    }
+
+    function shareProduct(id) {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        toast('تم نسخ رابط المنتج بنجاح');
+      }).catch(() => {
+        toast('تعذر نسخ الرابط تلقائياً');
+      });
+    }
+
+    function selectProductColor(colorName) {
+      const p = products.find(prod => prod.id === currentDetailProductId);
+      if (!p || !p.colors) return;
+      const foundColor = p.colors.find(c => c.name === colorName);
+      if (foundColor) {
+        selectedColorObj = foundColor;
+        const previewBox = document.getElementById('productImagePreview');
+        if (previewBox) {
+          previewBox.innerHTML = `
+            ${foundColor.icon}
+            <span class="absolute top-3 right-3 bg-[#0D2855] text-white text-[10px] font-bold px-2.5 py-1 rounded-full">${p.tag || 'مميز'}</span>
+          `;
+        }
+      }
+
+      document.querySelectorAll('.color-opt-btn').forEach(btn => {
+        btn.className = 'color-opt-btn px-4 py-2 rounded-xl border text-xs font-bold transition-all border-slate-300 text-slate-700 hover:bg-slate-50';
+      });
+      const selectedBtn = document.getElementById(`colorBtn_${colorName}`);
+      if (selectedBtn) {
+        selectedBtn.className = 'color-opt-btn px-4 py-2 rounded-xl border text-xs font-bold transition-all border-[#0D2855] bg-[#0D2855] text-white';
+      }
+    }
+
+    function updateDetailQty(delta) {
+      selectedQty = Math.max(1, selectedQty + delta);
+      document.getElementById('detailQtyDisplay').textContent = selectedQty;
+    }
+
+    function closeProductDetailModal() {
+      const modal = document.getElementById('productDetailModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('grid');
+    }
+    document.getElementById('closeProductDetail').onclick = closeProductDetailModal;
+
+    function addToCartDirect(id) {
+      const p = products.find(prod => prod.id === id);
+      const colorName = (p.colors && p.colors.length) ? p.colors[0].name : 'الافتراضي';
+      const key = `${id}_${colorName}`;
+      cart[key] = (cart[key] || 0) + 1;
+      renderCart();
+      toast('تمت إضافة المنتج إلى سلتك ✓');
+    }
+
+    function addCurrentToCart() {
+      if (!currentDetailProductId || !selectedColorObj) return;
+      const key = `${currentDetailProductId}_${selectedColorObj.name}`;
+      cart[key] = (cart[key] || 0) + selectedQty;
+      renderCart();
+      closeProductDetailModal();
+      toast('تمت إضافته إلى السلة بنجاح ✓');
+    }
+
+    function buyNowCurrent() {
+      if (!currentDetailProductId || !selectedColorObj) return;
+      const key = `${currentDetailProductId}_${selectedColorObj.name}`;
+      cart[key] = (cart[key] || 0) + selectedQty;
+      renderCart();
+      closeProductDetailModal();
+      document.getElementById('checkoutBtn').click();
+    }
+
+    function changeQty(key, delta) {
+      cart[key] = (cart[key] || 0) + delta;
+      if (cart[key] <= 0) delete cart[key];
+      renderCart();
+    }
+
+    function totals() {
+      let sub = 0;
+      Object.keys(cart).forEach(key => {
+        const [idStr] = key.split('_');
+        const p = products.find(prod => prod.id === parseInt(idStr));
+        if (p) sub += p.price * cart[key];
+      });
+      const disc = appliedCouponPercentage > 0 ? Math.round(sub * (appliedCouponPercentage / 100)) : 0;
+      return { sub, disc, total: sub - disc };
+    }
+
+    function renderCart() {
+      const count = Object.values(cart).reduce((a, b) => a + b, 0);
+      document.getElementById('cartCount').textContent = count;
+      const itemsContainer = document.getElementById('cartItems');
+      const cartKeys = Object.keys(cart);
+
+      if (!cartKeys.length) {
+        itemsContainer.innerHTML = `
+          <div class="text-center py-12 text-slate-400">
+            <div class="text-5xl mb-3">🛍️</div>
+            <h3 class="font-bold text-slate-700">سلتك فارغة حالياً</h3>
+            <p class="text-xs mt-1">تصفح المنتجات وأضف ما يعجبك بسهولة.</p>
+          </div>
+        `;
+      } else {
+        itemsContainer.innerHTML = cartKeys.map(key => {
+          const [idStr, colorName] = key.split('_');
+          const p = products.find(prod => prod.id === parseInt(idStr));
+          if (!p) return '';
+          const cObj = (p.colors && p.colors.length) ? (p.colors.find(c => c.name === colorName) || p.colors[0]) : { icon: '📦' };
+          return `
+            <div class="flex items-center justify-between gap-3 pt-3">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-2xl">${cObj.icon}</div>
+                <div>
+                  <strong class="block text-sm font-bold text-slate-800">${p.name}</strong>
+                  <span class="text-xs text-slate-500">${colorName} - ${money(p.price)}</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="flex items-center border border-slate-300 rounded-lg">
+                  <button onclick="changeQty('${key}', -1)" class="px-2 py-0.5 text-slate-600 hover:bg-slate-100 font-bold">-</button>
+                  <span class="px-2 text-xs font-bold">${cart[key]}</span>
+                  <button onclick="changeQty('${key}', 1)" class="px-2 py-0.5 text-slate-600 hover:bg-slate-100 font-bold">+</button>
+                </div>
+                <span class="font-bold text-sm text-[#0D2855]">${money(p.price * cart[key])}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      const t = totals();
+      document.getElementById('subtotal').textContent = money(t.sub);
+      document.getElementById('discount').textContent = '− ' + money(t.disc);
+      document.getElementById('total').textContent = money(t.total);
+      document.getElementById('checkoutBtn').disabled = !count;
+    }
+
+    document.getElementById('applyCoupon').onclick = () => {
+      const val = document.getElementById('couponInput').value.trim().toLowerCase();
+      const status = document.getElementById('couponStatus');
+      
+      const availableCoupons = storeData.coupons || [];
+      const found = availableCoupons.find(c => c.code.toLowerCase() === val && c.active !== false);
+
+      if (found) {
+        appliedCouponPercentage = found.discountPercent || 0;
+        status.textContent = `✓ تم تفعيل كوبون الخصم ${appliedCouponPercentage}% بنجاح!`;
+        status.className = 'text-xs font-bold mt-1.5 text-emerald-600';
+      } else {
+        appliedCouponPercentage = 0;
+        status.textContent = '✕ كود الخصم غير صحيح أو منتهي الصلاحية';
+        status.className = 'text-xs font-bold mt-1.5 text-rose-500';
+      }
+      renderCart();
+    };
+
+    const drawerBack = document.getElementById('drawerBack');
+    const drawerContent = drawerBack.querySelector('.drawer-content');
+    const favDrawerBack = document.getElementById('favDrawerBack');
+    const favDrawerContent = favDrawerBack.querySelector('.drawer-content');
+
+    function openCart() {
+      drawerBack.classList.remove('pointer-events-none', 'opacity-0', 'invisible');
+      drawerBack.classList.add('opacity-100', 'visible');
+      drawerContent.classList.remove('-translate-x-full');
+    }
+    function closeCart() {
+      drawerBack.classList.add('opacity-0', 'pointer-events-none');
+      drawerBack.classList.remove('opacity-100');
+      drawerContent.classList.add('-translate-x-full');
+      setTimeout(() => drawerBack.classList.add('invisible'), 300);
+    }
+
+    function openFav() {
+      favDrawerBack.classList.remove('pointer-events-none', 'opacity-0', 'invisible');
+      favDrawerBack.classList.add('opacity-100', 'visible');
+      favDrawerContent.classList.remove('-translate-x-full');
+    }
+    function closeFav() {
+      favDrawerBack.classList.add('opacity-0', 'pointer-events-none');
+      favDrawerBack.classList.remove('opacity-100');
+      favDrawerContent.classList.add('-translate-x-full');
+      setTimeout(() => favDrawerBack.classList.add('invisible'), 300);
+    }
+
+    document.getElementById('cartBtn').onclick = openCart;
+    document.getElementById('closeCart').onclick = closeCart;
+    drawerBack.onclick = e => { if (e.target === drawerBack) closeCart(); };
+
+    document.getElementById('favBtn').onclick = openFav;
+    document.getElementById('closeFav').onclick = closeFav;
+    favDrawerBack.onclick = e => { if (e.target === favDrawerBack) closeFav(); };
+
+    const modalBack = document.getElementById('modalBack');
+    document.getElementById('checkoutBtn').onclick = () => {
+      if (!Object.keys(cart).length) return;
+      closeCart();
+      modalBack.classList.remove('hidden');
+      modalBack.classList.add('grid');
+      document.getElementById('checkoutFormWrap').style.display = 'block';
+      document.getElementById('loadingView').classList.add('hidden');
+      document.getElementById('successView').classList.add('hidden');
+    };
+
+    document.getElementById('closeModal').onclick = () => {
+      modalBack.classList.add('hidden');
+      modalBack.classList.remove('grid');
+    };
+
+    document.querySelectorAll('input[name="payment"]').forEach(r => {
+      r.addEventListener('change', () => {
+        const isSham = document.querySelector('input[name="payment"]:checked').value === 'شام كاش';
+        document.getElementById('shamcashBox').style.display = isSham ? 'block' : 'none';
+        if (!isSham) {
+          document.getElementById('refInputArea').classList.add('hidden');
+        }
+      });
+    });
+
+    function showRefInput() {
+      document.getElementById('refInputArea').classList.remove('hidden');
+      toast('يرجى كتابة كود المعاملة بالأسفل للتحقق منه ✓');
+    }
+
+    document.getElementById('orderForm').addEventListener('submit', e => {
+      e.preventDefault();
+
+      const name = document.getElementById('customerName').value.trim();
+      const phone = document.getElementById('customerPhone').value.trim();
+      const city = document.getElementById('customerCity').value.trim();
+      const address = document.getElementById('customerAddress').value.trim();
+      const note = document.getElementById('customerNote').value.trim();
+      const payment = document.querySelector('input[name="payment"]:checked').value;
+      const shamRefInput = document.getElementById('shamcashRef');
+      const shamRef = shamRefInput ? shamRefInput.value.trim() : '';
+      const phoneError = document.getElementById('phoneError');
+
+      const phoneRegex = /^[0-9]{11}$/;
+      if (!phoneRegex.test(phone)) {
+        phoneError.classList.remove('hidden');
+        toast('❌ يرجى التأكد من كتابة رقم هاتف صحيح مكون من 11 رقماً بالضبط');
+        return;
+      } else {
+        phoneError.classList.add('hidden');
+      }
+
+      if (!name || !city || !address) {
+        toast('❌ يرجى تعبئة جميع الحقول الإجبارية المتبقية');
+        return;
+      }
+
+      if (payment === 'شام كاش') {
+        const refArea = document.getElementById('refInputArea');
+        if (refArea.classList.contains('hidden') || !shamRef) {
+          refArea.classList.remove('hidden');
+          toast('❌ يرجى الضغط على زر التم وإدخال كود المعاملة لشام كاش (Ref ID)');
+          return;
+        }
+
+        if (usedTransactionCodes.has(shamRef)) {
+          toast('⚠️ تنبيه أمني: كود المعاملة هذا مستخدم سابقاً ومكرر!');
+          return;
+        }
+
+        if (shamRef.length < 5) {
+          toast('⚠️ رمز المعاملة غير مجاز أو قصير جداً');
+          return;
+        }
+
+        usedTransactionCodes.add(shamRef);
+      }
+
+      const cartSnapshot = { ...cart };
+      const currentTotals = totals();
+
+      document.getElementById('checkoutFormWrap').style.display = 'none';
+      document.getElementById('loadingView').classList.remove('hidden');
+
+      setTimeout(() => {
+        currentOrderId = 'RZ-' + orderSeq++;
+        
+        // Save Order to LocalStorage for Admin Dashboard
+        const newOrder = {
+          id: currentOrderId,
+          customer: name,
+          phone: phone,
+          city: city,
+          address: address,
+          note: note,
+          payment: payment,
+          ref: shamRef,
+          total: currentTotals.total,
+          status: 'معلق',
+          date: new Date().toLocaleDateString('ar-SY'),
+          items: Object.keys(cartSnapshot).map(key => {
+            const [idStr, colorName] = key.split('_');
+            const p = products.find(prod => prod.id === parseInt(idStr));
+            return {
+              name: p ? p.name : 'منتج',
+              color: colorName,
+              qty: cartSnapshot[key],
+              price: p ? p.price : 0
+            };
+          })
+        };
+
+        storeData = getStoreData();
+        storeData.orders = storeData.orders || [];
+        storeData.orders.unshift(newOrder);
+        saveStoreData(storeData);
+
+        // Render Invoice UI
+        document.getElementById('invNumber').textContent = '#' + currentOrderId;
+        document.getElementById('invDate').textContent = newOrder.date;
+        document.getElementById('invCustomerName').textContent = name;
+        document.getElementById('invCustomerPhone').textContent = phone;
+        document.getElementById('invCustomerAddress').textContent = `${city} - ${address}`;
+
+        const cartKeys = Object.keys(cartSnapshot);
+        document.getElementById('invItemsBody').innerHTML = cartKeys.map(key => {
+          const [idStr, colorName] = key.split('_');
+          const p = products.find(prod => prod.id === parseInt(idStr));
+          if (!p) return '';
+          return `
+            <tr class="border-b border-slate-100">
+              <td class="py-2.5 px-2 font-bold">${p.name} (${colorName})</td>
+              <td class="py-2.5 px-2 text-center">${cartSnapshot[key]}</td>
+              <td class="py-2.5 px-2 text-left font-bold">${money(p.price * cartSnapshot[key])}</td>
+            </tr>
+          `;
+        }).join('');
+
+        document.getElementById('invSubtotal').textContent = money(currentTotals.sub);
+        document.getElementById('invDiscount').textContent = '− ' + money(currentTotals.disc);
+        document.getElementById('invPayment').textContent = payment + (shamRef ? ` (Ref: ${shamRef})` : '');
+        document.getElementById('invTotal').textContent = money(currentTotals.total);
+
+        const waNumber = (storeData.storeInfo && storeData.storeInfo.whatsapp) ? storeData.storeInfo.whatsapp.replace(/\+/g, '') : '963969537664';
+        const waMsg = `مرحباً ${storeData.storeInfo.name || 'متجر رونزي'} 👋%0Aأريد تأكيد الطلب التالي:%0A*رقم الفاتورة:* ${currentOrderId}%0A*الاسم:* ${name}%0A*الهاتف:* ${phone}%0A*العنوان:* ${city} - ${address}%0A*طريقة الدفع:* ${payment}${shamRef ? ' (Ref: ' + shamRef + ')' : ''}%0A*الإجمالي النهائي:* ${money(currentTotals.total)}`;
+        document.getElementById('sendWhatsappBtn').href = `https://wa.me/${waNumber}?text=${waMsg}`;
+
+        document.getElementById('loadingView').classList.add('hidden');
+        document.getElementById('successView').classList.remove('hidden');
+
+        cart = {};
+        appliedCouponPercentage = 0;
+        document.getElementById('couponInput').value = '';
+        document.getElementById('couponStatus').textContent = '';
+        renderCart();
+      }, 1500);
+    });
+
+    document.getElementById('downloadPdfBtn').onclick = () => {
+      window.print();
+    };
+
+    document.getElementById('finishBtn').onclick = () => {
+      modalBack.classList.add('hidden');
+      modalBack.classList.remove('grid');
+    };
+
+    function setupSearch() {
+      const desktopSearch = document.getElementById('searchInput');
+      const mobileSearch = document.getElementById('mobileSearchInput');
+
+      const handleSearch = (query) => {
+        const q = query.trim().toLowerCase();
+        if (!q) {
+          renderProducts(products);
+          return;
+        }
+        const filtered = products.filter(p => 
+          p.name.toLowerCase().includes(q) || 
+          (p.cat && p.cat.toLowerCase().includes(q)) || 
+          (p.desc && p.desc.toLowerCase().includes(q))
+        );
+        renderProducts(filtered);
+      };
+
+      desktopSearch.addEventListener('input', e => handleSearch(e.target.value));
+      mobileSearch.addEventListener('input', e => handleSearch(e.target.value));
+    }
+
+    function toast(str) {
+      const t = document.getElementById('toast');
+      t.textContent = str;
+      t.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+      t.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        t.classList.remove('opacity-100', 'translate-y-0');
+        t.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+      }, 3000);
+    }
+
+    window.addEventListener('storage', () => {
+      storeData = getStoreData();
+      products = storeData.products.filter(p => p.active !== false);
+      applyStoreConfig();
+      renderProducts();
+    });
+
+    applyStoreConfig();
+    renderProducts();
+    renderCart();
+    renderWishlist();
+    setupSearch();
+  </script>
+</body>
+</html>
